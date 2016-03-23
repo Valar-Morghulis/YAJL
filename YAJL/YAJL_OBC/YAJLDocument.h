@@ -30,6 +30,13 @@
 
 #include "YAJLParser.h"
 
+#if __has_feature(objc_arc)
+#define yajl_weak __weak
+#else
+#define yajl_weak __block
+#endif
+
+
 typedef enum {
   YAJLDecoderCurrentTypeNone,
   YAJLDecoderCurrentTypeArray,
@@ -53,11 +60,11 @@ extern NSInteger YAJLDocumentStackCapacity;
   id root_; // NSArray or NSDictionary
   YAJLParser *parser_;
   
-  __weak id<YAJLDocumentDelegate> delegate_;
+  yajl_weak id<YAJLDocumentDelegate> delegate_;
   
-  __weak NSMutableDictionary *dict_; // weak; if map in progress, points to the current map 
-  __weak NSMutableArray *array_; // weak; If array in progress, points the current array
-  __weak NSString *key_; // weak; If map in progress, points to current key
+  yajl_weak NSMutableDictionary *dict_; // weak; if map in progress, points to the current map
+  yajl_weak NSMutableArray *array_; // weak; If array in progress, points the current array
+  yajl_weak NSString *key_; // weak; If map in progress, points to current key
   
   NSMutableArray *stack_;
   NSMutableArray *keyStack_;
